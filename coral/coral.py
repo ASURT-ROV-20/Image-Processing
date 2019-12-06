@@ -4,7 +4,7 @@ import math
 
 image = cv2.imread("Capture.PNG")
 
-abstracted_coral = np.zeros((424,387,3), np.uint8)              # Empty image to draw on
+abstracted_coral = np.zeros((387,424,3), np.uint8)              # Empty image to draw on
 
 #########################################    Color Mask    ###########################################
 hsv= cv2.cvtColor(image,cv2.COLOR_BGR2HSV)                      
@@ -22,8 +22,23 @@ mask = pink_mask + white_mask
 ################################ Another approch #####################################################
 
 x, y, _ = image.shape
-print(math.ceil(x / 25))
-print(math.ceil(y / 25))
+gWidth = 20
+# print(math.floor(x / gWidth))
+# print(math.floor(y / gWidth))
+color = (255, 255, 255)
+mask2 = mask.copy()
+for vline in range(math.floor(y / gWidth)):
+    cv2.line(mask,((vline+1)*gWidth,0),((vline+1)*gWidth,x),color,1)
+for hline in range(math.floor(x / gWidth)):
+    cv2.line(mask,(0,(hline+1)*gWidth),(y,(hline+1)*gWidth),color,1)
+for row in range(gWidth):
+    for col in range(gWidth):
+        part = mask2[row*gWidth:(row+1)*gWidth, col*gWidth:(col+1)*gWidth]
+        #print("[",row*gWidth,":",(row+1)*gWidth,", ",col*gWidth,":",(col+1)*gWidth,"]")
+        print(round((np.sum(part)/255)/(gWidth*gWidth),1)," ", end="")
+    print("\n")
+#cv2.imshow("pink",mask)
+#cv2.waitKey(0)
 
 ######################################################################################################
 '''
@@ -43,20 +58,23 @@ kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(1,25))
 vertical = cv2.erode(mask,kernel)                 # Vertical Erosion to flaten horizontal surface 
 ######################################################################################################
 
-hor_contours, _ = cv2.findContours(horizontal,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
-temp=[]
-hor_rectangles=[]
+############ Getting contours arround verticale and horizontal mask ##################################
+
+hor_contours, _ = cv2.findContours(horizontal,mode = cv2.RETR_EXTERNAL,
+                                    method = cv2.CHAIN_APPROX_SIMPLE)
+temp=[]                         # will store contours
+hor_rectangles=[]               # will store bounding box arround the contoure
 for i in hor_contours:
     if cv2.contourArea(i) > 100:
         hor_rectangles.append(cv2.boundingRect(i))
         temp.append(i)
 hor_contours = temp
-# cv2.drawContours(image, hor_contours, -1, (0,255,0), 9)
 for i in hor_rectangles:
     cv2.rectangle(abstracted_coral, (i[0],int(i[1]+i[3]/2)),(i[0]+i[2],int(i[1]+i[3]/2)), (255,255,255), 2)
 
 
-ver_contours, _ = cv2.findContours(vertical,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
+ver_contours, _ = cv2.findContours(vertical,mode = cv2.RETR_EXTERNAL,
+                                     method = cv2.CHAIN_APPROX_SIMPLE)
 temp=[]
 ver_rectangles=[]
 for i in ver_contours:
@@ -66,14 +84,17 @@ for i in ver_contours:
 ver_contours = temp
 for i in ver_rectangles:
     cv2.rectangle(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 2)
+######################################################################################################
 
 # boundRect = ver_rectangles
 # for i in range(len(boundRect)):
 #     cv2.rectangle(image, (int(boundRect[i][0]), int(boundRect[i][1])),
 #           (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), (0,0,255), 2)
 
-cv2.imshow("hor",vertical)
-cv2.imshow("ver",abstracted_coral)
+cv2.imshow("hor",horizontal)
+cv2.imshow("ver",vertical)
+cv2.imshow("mask",mask)
+cv2.imshow("output",abstracted_coral)
 cv2.imshow("pink",image)
 cv2.waitKey(0)
 
@@ -83,4 +104,6 @@ cv2.waitKey(0)
 #     for line in lines:
 #         x1, y1, x2, y2 = line[0]
 #         cv2.line(image, (x1, y1), (x2, y2), (255, 0, 0), 1)
+
+
 '''
