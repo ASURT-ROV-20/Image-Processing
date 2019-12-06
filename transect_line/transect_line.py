@@ -6,7 +6,7 @@ import math
 initial_state = True
 frame = cv2.imread('img_01.png')
 distance_threshold = 30
-orientation_threshold = 0.87
+orientation_threshold = 3
 
 
 def get_distance(frame):
@@ -28,6 +28,11 @@ def get_distance(frame):
 def midpoint(cnt):
     topmost = tuple(cnt[cnt[:, :, 1].argmin()][0])
     bottommost = tuple(cnt[cnt[:, :, 1].argmax()][0])
+    if topmost[0] > bottommost[0]:
+        pass
+    else:
+        pass
+
     mid = (bottommost[0] + topmost[0]) / 2, (bottommost[1] + topmost[1]) / 2
     return mid
 
@@ -63,11 +68,18 @@ def get_orientation(frame):
     cnt1, cnt2 = get_largest_two_contours(thresh)
     rect = cv2.minAreaRect(cnt1)
     orientation1 = rect[-1]
-    print(orientation1)
+
+    # width < height
+    if rect[1][0] < rect[1][1]:
+        orientation1 = orientation1 - 90
+
     rect = cv2.minAreaRect(cnt2)
     orientation2 = rect[-1]
-    print(orientation2)
-    return orientation1, orientation2
+
+    if rect[1][0] < rect[1][1]:
+        orientation2 = orientation2 - 90
+
+    return abs(orientation1), abs(orientation2)
 
 
 while True:
@@ -79,23 +91,23 @@ while True:
         initial_distance = distance
         initial_angles = angles
     else:
-        distance_error = distance - initial_distance
-        if distance_error > distance_threshold:
+        distance_error = initial_distance - distance
+        if distance_error < -distance_threshold:
             print(f"positive error -> etla3 {distance_error}")
-        elif distance_error < -distance_threshold:
+        elif distance_error > distance_threshold:
             print(f"negative error -> enzl {distance_error}")
         else:
             print(f"dont change z yasta")
 
-        orientation_error = angles[1] - initial_angles[1]
-        if angles[0] > orientation_threshold:
+        orientation_error = initial_angles[1] - angles[1]
+        if orientation_error > orientation_threshold:
             print(f"lef ymeen {angles[1]}, {initial_angles[1]}, {orientation_error}")
-        elif angles[0] < -orientation_threshold:
+        elif orientation_error < -orientation_threshold:
             print(f"lef shmal {angles[1]}, {initial_angles[1]}, {orientation_error}")
         else:
             print(f"dont change orientation yasta")
 
-    frame = cv2.imread('img_07.png')
+    frame = cv2.imread('img_02.png')
 
 # video.release()
 cv2.destroyAllWindows()
