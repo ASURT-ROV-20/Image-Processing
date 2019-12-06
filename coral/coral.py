@@ -2,6 +2,17 @@ import numpy as np
 import cv2
 import math
 
+def draw(array, cellSize):
+    x, y = array.shape
+    abstracted = np.zeros((y*cellSize,x*cellSize), np.uint8)
+    for row in range(x):
+        for col in range(y):
+            color = array[row][col]
+            # print(type(int(4)))
+            cv2.rectangle(abstracted, (col*cellSize, row*cellSize), ((col+1)*cellSize, (row+1)*cellSize),int(color), cv2.FILLED)
+            # print(array[row][col])
+    return abstracted
+
 image = cv2.imread("Capture.PNG")
 
 abstracted_coral = np.zeros((387,424,3), np.uint8)              # Empty image to draw on
@@ -19,91 +30,59 @@ white_mask= cv2.inRange(hsv,lower_white,higher_white)
 mask = pink_mask + white_mask                                                                       
 ######################################################################################################
 
-################################ Another approch #####################################################
-
-x, y, _ = image.shape
-gWidth = 20
-# print(math.floor(x / gWidth))
-# print(math.floor(y / gWidth))
-color = (255, 255, 255)
-mask2 = mask.copy()
-for vline in range(math.floor(y / gWidth)):
-    cv2.line(mask,((vline+1)*gWidth,0),((vline+1)*gWidth,x),color,1)
-for hline in range(math.floor(x / gWidth)):
-    cv2.line(mask,(0,(hline+1)*gWidth),(y,(hline+1)*gWidth),color,1)
-for row in range(gWidth):
-    for col in range(gWidth):
-        part = mask2[row*gWidth:(row+1)*gWidth, col*gWidth:(col+1)*gWidth]
-        #print("[",row*gWidth,":",(row+1)*gWidth,", ",col*gWidth,":",(col+1)*gWidth,"]")
-        print(round((np.sum(part)/255)/(gWidth*gWidth),1)," ", end="")
-    print("\n")
-#cv2.imshow("pink",mask)
-#cv2.waitKey(0)
-
-######################################################################################################
-'''
 #######################   Applying Morphological Transformations   ###################################
 
 # 1- Closing Operation to remove small holes in the image (black holes in the mask) 
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
 mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-# edges = cv2.Canny(pink_mask,100, 255)
-
-# 2- Erosion to flaten the surface of the coral 
-#    the surface isn't smooth in the linage between two pipes 
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(25,1))
 horizontal = cv2.erode(mask,kernel)               # horizontal Erosion to flaten Vertical surface 
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(1,25))
 vertical = cv2.erode(mask,kernel)                 # Vertical Erosion to flaten horizontal surface 
+
+mask = vertical + horizontal
+
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
+mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+
+
 ######################################################################################################
 
-############ Getting contours arround verticale and horizontal mask ##################################
+################################ Another approch #####################################################
 
-hor_contours, _ = cv2.findContours(horizontal,mode = cv2.RETR_EXTERNAL,
-                                    method = cv2.CHAIN_APPROX_SIMPLE)
-temp=[]                         # will store contours
-hor_rectangles=[]               # will store bounding box arround the contoure
-for i in hor_contours:
-    if cv2.contourArea(i) > 100:
-        hor_rectangles.append(cv2.boundingRect(i))
-        temp.append(i)
-hor_contours = temp
-for i in hor_rectangles:
-    cv2.rectangle(abstracted_coral, (i[0],int(i[1]+i[3]/2)),(i[0]+i[2],int(i[1]+i[3]/2)), (255,255,255), 2)
+x, y, _ = image.shape                               # shape of the orignal image
+gWidth = 20                                         # width of the grid cell
+VLineCount = math.floor(x / gWidth)                 # number of vertical lines (cols)
+HLineCount = math.floor(y / gWidth)                 # number of horizontal lines (rows)                           
+output = np.zeros(((HLineCount+1),                  # output image
+                    (VLineCount+1)), np.uint8)
 
 
-ver_contours, _ = cv2.findContours(vertical,mode = cv2.RETR_EXTERNAL,
-                                     method = cv2.CHAIN_APPROX_SIMPLE)
-temp=[]
-ver_rectangles=[]
-for i in ver_contours:
-    if cv2.contourArea(i) > 100:
-        ver_rectangles.append(cv2.boundingRect(i))
-        temp.append(i)
-ver_contours = temp
-for i in ver_rectangles:
-    cv2.rectangle(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 2)
-######################################################################################################
+for row in range(HLineCount+1):
+    for col in range(VLineCount+1):
+        part = mask[row*gWidth:(row+1)*gWidth, col*gWidth:(col+1)*gWidth]
+        print(round((np.sum(part)/255)/(gWidth*gWidth),1)," ", end="")
+        output[row][col] = (np.sum(part)/255)/(gWidth*gWidth)*255
+    print("\n")
+kernel = np.array([[0,1,0],
+                   [1,10,1],
+                   [0,1,0]])
+kernel = kernel / 14
+out2 = cv2.filter2D(output, -1, kernel)
+resized = cv2.resize(out2, (500,500),interpolation = cv2.INTER_NEAREST)
+out2 = draw(out2,10)
+cv2.imshow("out2",out2)
+_,out2 = cv2.threshold(out2,255*0.4,255,cv2.THRESH_BINARY)
+cv2.imshow("out88",out2)
 
-# boundRect = ver_rectangles
-# for i in range(len(boundRect)):
-#     cv2.rectangle(image, (int(boundRect[i][0]), int(boundRect[i][1])),
-#           (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), (0,0,255), 2)
+# Draw  the grid on the image
+for vline in range(HLineCount):
+    cv2.line(mask,((vline+1)*gWidth,0),((vline+1)*gWidth,x),(255,255,255),1)
+for hline in range(VLineCount):
+    cv2.line(mask,(0,(hline+1)*gWidth),(y,(hline+1)*gWidth),(255,255,255),1)
 
-cv2.imshow("hor",horizontal)
-cv2.imshow("ver",vertical)
 cv2.imshow("mask",mask)
-cv2.imshow("output",abstracted_coral)
-cv2.imshow("pink",image)
 cv2.waitKey(0)
 
-# lines = cv2.HoughLinesP(edges,1,np.pi/180,40,maxLineGap=15)
-# print(len(lines)/2)
-# if lines is not None :
-#     for line in lines:
-#         x1, y1, x2, y2 = line[0]
-#         cv2.line(image, (x1, y1), (x2, y2), (255, 0, 0), 1)
-
-
-'''
+######################################################################################################
