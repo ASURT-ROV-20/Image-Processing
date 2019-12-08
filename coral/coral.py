@@ -52,7 +52,7 @@ for i in hor_contours:
         temp.append(i)
 hor_contours = temp
 for i in hor_rectangles:
-    cv2.rectangle(abstracted_coral, (i[0],int(i[1]+i[3]/2)),(i[0]+i[2],int(i[1]+i[3]/2)), (255,255,255), 1)
+    cv2.rectangle(abstracted_coral, (i[0],int(i[1]+i[3]/2)),(i[0]+i[2],int(i[1]+i[3]/2)), (255,255,255), 4)
     # other possible approach
     # x1 = i[0]
     # y1 = int(i[1]+i[3]/2)
@@ -70,26 +70,37 @@ for i in ver_contours:
         temp.append(i)
 ver_contours = temp
 for i in ver_rectangles:
-    cv2.rectangle(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 1)
+    cv2.rectangle(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 4)
 #other possible appraoch   
     # x1 = i[0]+int(i[2]/2)
     # y1 = i[1]
     # x2 = i[0]+int(i[2]/2)
     # y2 = i[1]+i[3]
     # print("P1:",x1,y1,"P2:",x2,y2)
+
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(20,30))
+abstracted_coral = cv2.morphologyEx(abstracted_coral,cv2.MORPH_CLOSE ,kernel)   #closinng transformation
 ######################################################################################################
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(23,23))
-abstracted_coral = cv2.morphologyEx(abstracted_coral,cv2.MORPH_CLOSE ,kernel)
 
-boundRect = ver_rectangles
-for i in range(len(boundRect)):
-    cv2.rectangle(image, (int(boundRect[i][0]), int(boundRect[i][1])),
-          (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), (0,0,255), 2)
+grey = cv2.cvtColor(abstracted_coral,cv2.COLOR_BGR2GRAY)    
+grey = np.float32(grey)
+dst = cv2.cornerHarris(grey,2,3,0.04)
+dst = cv2.dilate(dst,None)
+dst = np.int8(dst)
+cv2.imshow("dst",dst)
+x,y = dst.shape
 
-cv2.drawContours(image, hor_contours, -1, (0,255,0), 9)
+for row in range(x):
+    for col in range(y):
+        if(dst[row][col] < 0) :
+            dst[row][col] = 0
+cv2.imshow("dst",dst)
+# abstracted_coral[dst>0.01*dst.max()]=[0,0,255]
 
-# cv2.imshow("hor",horizontal)
+
+# cv2.imshow('dst',abstracted_coral)
 cv2.imshow("orig",image)
+# cv2.imshow("hor",horizontal)
 # cv2.imshow("ver",vertical)
 # cv2.imshow("reConstructed",vertical+horizontal)
 cv2.imshow("diff",mask-vertical-horizontal)
@@ -100,3 +111,9 @@ cv2.waitKey(0)
 
 
 ############ For Testing #################
+# boundRect = ver_rectangles
+# for i in range(len(boundRect)):
+#     cv2.rectangle(image, (int(boundRect[i][0]), int(boundRect[i][1])),
+#           (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), (0,0,255), 2)
+
+# cv2.drawContours(image, hor_contours, -1, (0,255,0), 9)
