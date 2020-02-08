@@ -134,7 +134,6 @@ if __name__== "__main__":
 # cv2.imshow("abstract",abstracted_coral)
 # cv2.waitKey(0)
 
-
 ############ For Testing #################
 # boundRect = ver_rectangles
 # for i in range(len(boundRect)):

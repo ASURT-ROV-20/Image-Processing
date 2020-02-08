@@ -20,7 +20,7 @@ def main():
         if initial_state:
             initial_state = False
             initial_distance = distance
-            initial_angles = angles
+            initial_angles = 90
         else:
             distance_error = initial_distance - distance
             if distance_error < -distance_threshold:
@@ -30,11 +30,11 @@ def main():
             else:
                 print(f"dont change z yasta")
 
-            orientation_error = initial_angles[1] - angles[1]
+            orientation_error = initial_angles - angles[1]
             if orientation_error > orientation_threshold:
-                print(f"lef ymeen {angles[1]}, {initial_angles[1]}, {orientation_error}")
+                print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
             elif orientation_error < -orientation_threshold:
-                print(f"lef shmal {angles[1]}, {initial_angles[1]}, {orientation_error}")
+                print(f"lef shmal {angles[1]}, {initial_angles}, {orientation_error}")
             else:
                 print(f"dont change orientation yasta")
         frame = cv2.imread('img_01.png')
