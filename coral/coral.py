@@ -64,6 +64,14 @@ def process_colar(image):
 
     for i in ver_rectangles:
         cv2.line(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 1)
+
+    ### test ###
+    # cv2.imshow("hor",image)
+    # cv2.imshow("ver",vertical)
+    # cv2.imshow("temp",original)
+    # cv2.imshow("mask",mask)
+    # cv2.imshow("abstract",abstracted_coral)
+    # cv2.waitKey(0)
         
     ######################################################################################################
 
@@ -102,19 +110,27 @@ def process_colar(image):
 def main():
     image = cv2.imread("destination.PNG")
     abstracted_coral1, abstracted_coral1_x1, abstracted_coral1_x2, abstracted_coral1_y = process_colar(image)
+    abstracted_coral1_distance = abs(abstracted_coral1_x1 - abstracted_coral1_x2)
     # cv2.circle(abstracted_coral1,(abstracted_coral1_x1,abstracted_coral1_y),3,(0,0,255),2)
     # cv2.circle(abstracted_coral1,(abstracted_coral1_x2,abstracted_coral1_y),3,(0,0,255),2)
 
     image = cv2.imread("transformed.PNG")
     abstracted_coral2, abstracted_coral2_x1, abstracted_coral2_x2, abstracted_coral2_y = process_colar(image)
+    abstracted_coral2_distance = abs(abstracted_coral2_x1 - abstracted_coral2_x2)
+    print(abstracted_coral1_distance,abstracted_coral2_distance)
     # cv2.circle(abstracted_coral2,(abstracted_coral2_x1,abstracted_coral2_y),3,(0,0,255),2)
     # cv2.circle(abstracted_coral2,(abstracted_coral2_x2,abstracted_coral2_y),3,(0,0,255),2)
 
-    tx = abstracted_coral1_x1 - abstracted_coral2_x1
-    ty = abstracted_coral1_y - abstracted_coral2_y
+    scale_factor = abstracted_coral1_distance/abstracted_coral2_distance
+    height, width, _ = abstracted_coral2.shape
+    scaled_abstracted_coral2 = cv2.resize(abstracted_coral2,(int(scale_factor*width),int(scale_factor*height)))
+    _,scaled_abstracted_coral2 = cv2.threshold(scaled_abstracted_coral2,10,255,cv2.THRESH_BINARY)
+
+    tx = abstracted_coral1_x1 - scale_factor * abstracted_coral2_x1
+    ty = abstracted_coral1_y - scale_factor * abstracted_coral2_y
     T = np.float32([[1, 0, tx], [0, 1, ty]]) 
 
-    img_translation = cv2.warpAffine(abstracted_coral2, T, (762, 551)) 
+    img_translation = cv2.warpAffine(scaled_abstracted_coral2, T, (762, 551)) 
 
     cv2.imshow("destination",abstracted_coral1)
     cv2.imshow("transformed",abstracted_coral2)
