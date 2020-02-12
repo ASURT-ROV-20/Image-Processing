@@ -21,15 +21,14 @@ def process_colar(image):
     ######################################################################################################
     original = mask
     cott, _ = cv2.findContours(original,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
-    print(cott)
-    boundRect = cott
-    for i in range(len(boundRect)):
-        cv2.rectangle(image, (int(boundRect[i][0]), int(boundRect[i][1])),
-              (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), (0,0,255), 2)
+    # boundRect =cv2.boundingRect(cott)
+    for i in range(len(cott)):
+        boundRect =cv2.boundingRect(cott[i])
+        cv2.rectangle(original, (int(boundRect[0]), int(boundRect[1])),
+              (int(boundRect[0]+boundRect[2]), int(boundRect[1]+boundRect[3])), (255,255,255), 2)
 
-    cv2.imshow("abstract",image)
+    cv2.imshow("abstract",original)
     cv2.waitKey(0)
-
 
     #######################   Applying Morphological Transformations   ###################################
 
@@ -75,12 +74,12 @@ def process_colar(image):
         cv2.line(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 1)
 
     ### test ###
-    cv2.imshow("hor",image)
-    cv2.imshow("ver",vertical)
-    cv2.imshow("temp",original)
-    cv2.imshow("mask",mask)
-    cv2.imshow("abstract",abstracted_coral)
-    cv2.waitKey(0)
+    # cv2.imshow("hor",image)
+    # cv2.imshow("ver",vertical)
+    # cv2.imshow("temp",original)
+    # cv2.imshow("mask",mask)
+    # cv2.imshow("abstract",abstracted_coral)
+    # cv2.waitKey(0)
         
     ######################################################################################################
 
@@ -170,3 +169,5 @@ if __name__== "__main__":
 #           (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), (0,0,255), 2)
 
 # cv2.drawContours(image, hor_contours, -1, (0,255,0), 9)
+
+# TODO hit or miss to implement adaptive erosion
