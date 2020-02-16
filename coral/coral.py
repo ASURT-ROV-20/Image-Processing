@@ -19,16 +19,20 @@ def process_colar(image):
                                                                                                         
     mask = pink_mask + white_mask                                                                       
     ######################################################################################################
-    original = mask
-    cott, _ = cv2.findContours(original,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
-    # boundRect =cv2.boundingRect(cott)
-    for i in range(len(cott)):
-        boundRect =cv2.boundingRect(cott[i])
-        cv2.rectangle(original, (int(boundRect[0]), int(boundRect[1])),
-              (int(boundRect[0]+boundRect[2]), int(boundRect[1]+boundRect[3])), (255,255,255), 2)
 
-    cv2.imshow("abstract",original)
-    cv2.waitKey(0)
+    ############ Getting contour arround the whole coral and calculate the erosion Constant ##############
+    
+    cott, _ = cv2.findContours(mask,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
+
+    contours_Dic = {}
+    for i in range(len(cott)):
+        area = cv2.contourArea(cott[i])
+        contours_Dic[area] = i
+
+    i = contours_Dic[max(list(contours_Dic))]
+    
+    _, _, coral_width, _ = cv2.boundingRect(cott[i])
+    ######################################################################################################
 
     #######################   Applying Morphological Transformations   ###################################
 
@@ -40,9 +44,9 @@ def process_colar(image):
 
     # 2- Erosion to flaten the surface of the coral 
     #    the surface isn't smooth in the linage between two pipes 
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(25,1))
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(coral_width//15,1))
     horizontal = cv2.erode(mask,kernel)               # horizontal Erosion to flaten Vertical surface 
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(1,23))
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(1,coral_width//14))
     vertical = cv2.erode(mask,kernel)                 # Vertical Erosion to flaten horizontal surface 
     ######################################################################################################
 
@@ -57,7 +61,7 @@ def process_colar(image):
             temp.append(i)
     hor_contours = temp
     for i in hor_rectangles:
-        cv2.line(abstracted_coral, (i[0],int(i[1]+i[3]/2)),(i[0]+i[2],int(i[1]+i[3]/2)), (255,255,255), 1)
+        cv2.line(abstracted_coral, (i[0],int(i[1]+i[3]/2)),(i[0]+i[2],int(i[1]+i[3]/2)), (255,255,255), 5)
 
 
     ver_contours, _ = cv2.findContours(vertical,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
@@ -71,7 +75,7 @@ def process_colar(image):
 
 
     for i in ver_rectangles:
-        cv2.line(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 1)
+        cv2.line(abstracted_coral, (i[0]+int(i[2]/2),i[1]),(i[0]+int(i[2]/2),i[1]+i[3]), (255,255,255), 5)
 
     ### test ###
     # cv2.imshow("hor",image)
@@ -141,11 +145,14 @@ def main():
 
     img_translation = cv2.warpAffine(scaled_abstracted_coral2, T, (x, y))
     
-    #result = abstracted_coral1 - img_translation
+    # result = abstracted_coral1 - img_translation
 
-    cv2.imshow("destination",abstracted_coral1)
-    cv2.imshow("transformed",abstracted_coral2)
-    cv2.imshow("translated",img_translation)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
+    result = cv2.erode(abstracted_coral1 - img_translation,kernel)
+
+    # cv2.imshow("destination",abstracted_coral1)
+    # cv2.imshow("transformed",abstracted_coral2)
+    cv2.imshow("translated", result)
     # cv2.imshow("result",result)
     cv2.waitKey(0)
 
