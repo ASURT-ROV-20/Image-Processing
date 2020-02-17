@@ -1,18 +1,35 @@
 import cv2
 import numpy as np
 import math
+# import rospy
+# from geometry_msgs.msg import Quaternion
 
-# video = cv2.VideoCapture('udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! decodebin ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
+video = cv2.VideoCapture('udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! decodebin ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
+
+
+# def init_ros():
+#     global rate
+#     rospy.init_node('autonomous_node', anonymous=True)
+#     rate = rospy.Rate(10)  # 10hz  # ? rospy rate?
+#     # rospy.init_node('qt_equation_listener', anonymous=True)
+#     # todo send ros msgs in a new thread
+#
+#
+# def create_ros_publisher():
+#     return rospy.Publisher("rov_velocity", Quaternion, queue_size=10)  # ? rospy queue size?
 
 
 def main():
     global frame
     initial_state = True
-    frame = cv2.imread('img_02.png')
+    # init_ros()
+    # publisher = create_ros_publisher()
+    # success, frame = video.read()
+    success = True
     distance_threshold = 30
     orientation_threshold = 3
-    while True:
-        # ret, frame = video.read()
+    while success:
+        success, frame = video.read()
         cnt1, cnt2 = get_blue_line_contours(frame)
         distance = get_distance(cnt1, cnt2)
         angles = get_orientation(cnt1, cnt2)
@@ -24,6 +41,14 @@ def main():
         else:
             distance_error = initial_distance - distance
             if distance_error < -distance_threshold:
+                # publisher.publish(motion_json)
+                # geometry_msgs::Quaternion
+                # msg;
+                # msg.x = prevX;
+                # msg.y = prevY;
+                # msg.z = prevZ;
+                # msg.w = prevR;
+                # m_publisher.publish(msg);
                 print(f"negative error -> etla3 fo2 {distance_error}")
             elif distance_error > distance_threshold:
                 print(f"positive error -> enzl ta7t {distance_error}")
@@ -38,8 +63,8 @@ def main():
             else:
                 print(f"dont change orientation yasta")
         frame = cv2.imread('img_01.png')
-
-    # video.release()
+        # rate.sleep() # ros
+    video.release()
     cv2.destroyAllWindows()
 
 
