@@ -4,7 +4,9 @@ import math
 # import rospy
 # from geometry_msgs.msg import Quaternion
 
-video = cv2.VideoCapture('udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! decodebin ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
+# video = cv2.VideoCapture('udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! decodebin ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
+video = cv2.VideoCapture('http://192.168.1.151:8080/video')
+video = cv2.VideoCapture('my_vid.mp4')
 
 
 # def init_ros():
@@ -30,7 +32,13 @@ def main():
     orientation_threshold = 3
     while success:
         success, frame = video.read()
-        cnt1, cnt2 = get_blue_line_contours(frame)
+        cnt1and2 = get_blue_line_contours(frame)
+        if cnt1and2 is None or len(cnt1and2) < 2:
+            print(f"error: no blue lines found")
+            continue
+        else:
+            cnt1, cnt2 = cnt1and2
+
         distance = get_distance(cnt1, cnt2)
         angles = get_orientation(cnt1, cnt2)
         draw_contours(cnt1, cnt2)
@@ -40,36 +48,52 @@ def main():
             initial_angles = 90
         else:
             distance_error = initial_distance - distance
+
+            up = ""
+            right = ""
             if distance_error < -distance_threshold:
-                # publisher.publish(motion_json)
-                # geometry_msgs::Quaternion
-                # msg;
-                # msg.x = prevX;
-                # msg.y = prevY;
-                # msg.z = prevZ;
-                # msg.w = prevR;
-                # m_publisher.publish(msg);
-                print(f"negative error -> etla3 fo2 {distance_error}")
+                publish_direction()
+                # print(f"negative error -> etla3 fo2 {distance_error}")
+                up = "uppp " + str(distance_error)
+
             elif distance_error > distance_threshold:
-                print(f"positive error -> enzl ta7t {distance_error}")
+                up = "down " + str(distance_error)
             else:
-                print(f"dont change z yasta")
+                up = "None"
 
             orientation_error = initial_angles - angles[1]
             if orientation_error > orientation_threshold:
-                print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
+                right = "right " + str(orientation_error)
+                # print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
             elif orientation_error < -orientation_threshold:
-                print(f"lef shmal {angles[1]}, {initial_angles}, {orientation_error}")
+                right = "left " + str(orientation_error)
+                # print(f"lef shmal {angles[1]}, {initial_angles}, {orientation_error}")
             else:
-                print(f"dont change orientation yasta")
+                right = "None "
+                # print(f"dont change orientation yasta")
+            print(up, right)
         frame = cv2.imread('img_01.png')
         # rate.sleep() # ros
     video.release()
     cv2.destroyAllWindows()
 
 
+def publish_direction(z, w):
+    pass
+    # publisher.publish(motion_json)
+    # geometry_msgs:
+    # :Quaternion
+    # msg;
+    # msg.x = prevX;
+    # msg.y = prevY;
+    # msg.z = prevZ
+    # msg.w = prevR
+    # publisher.publish(msg);
+
+
 def get_blue_line_contours(frame):
     frame = cv2.resize(frame, (600, 400))
+    cv2.imshow("frame", frame)
     thresh = get_blue_mask(frame)
     return get_largest_two_contours(thresh)
 
@@ -78,7 +102,7 @@ def draw_contours(cnt1, cnt2):
     mask = np.zeros(frame.shape, np.uint8)
     cv2.drawContours(mask, [cnt1, cnt2], -1, (0, 255, 0), 1)
     cv2.imshow("test", mask)
-    cv2.waitKey()
+    cv2.waitKey(2)
 
 
 def get_blue_mask(frame):
