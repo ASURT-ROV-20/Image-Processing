@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="108044e4-ab2b-4915-ad50-a3dd988783e9" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1UzkDUofCcjA3e4GgMHnzugeFxF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Stitching.py" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Stitching" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="ROV Box Unfold" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Stitching.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="108044e4-ab2b-4915-ad50-a3dd988783e9" name="Default Changelist" comment="" />
+      <created>1576366691207</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1576366691207</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="146" y="24" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576367088393">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state x="146" y="24" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.24.1366.693@0.24.1366.693" timestamp="1576367088393" />
+    <state x="469" y="124" key="FileChooserDialogImpl" timestamp="1576367082076">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state x="469" y="124" key="FileChooserDialogImpl/0.24.1366.693@0.24.1366.693" timestamp="1576367082076" />
+    <state width="1343" height="176" key="GridCell.Tab.0.bottom" timestamp="1581963777451">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="176" key="GridCell.Tab.0.bottom/0.24.1366.693@0.24.1366.693" timestamp="1581963777451" />
+    <state width="1343" height="176" key="GridCell.Tab.0.center" timestamp="1581963777450">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="176" key="GridCell.Tab.0.center/0.24.1366.693@0.24.1366.693" timestamp="1581963777450" />
+    <state width="1343" height="176" key="GridCell.Tab.0.left" timestamp="1581963777450">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="176" key="GridCell.Tab.0.left/0.24.1366.693@0.24.1366.693" timestamp="1581963777450" />
+    <state width="1343" height="176" key="GridCell.Tab.0.right" timestamp="1581963777451">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="176" key="GridCell.Tab.0.right/0.24.1366.693@0.24.1366.693" timestamp="1581963777451" />
+    <state width="1343" height="220" key="GridCell.Tab.1.bottom" timestamp="1576430486098">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="220" key="GridCell.Tab.1.bottom/0.24.1366.693@0.24.1366.693" timestamp="1576430486098" />
+    <state width="1343" height="220" key="GridCell.Tab.1.center" timestamp="1576430486098">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="220" key="GridCell.Tab.1.center/0.24.1366.693@0.24.1366.693" timestamp="1576430486098" />
+    <state width="1343" height="220" key="GridCell.Tab.1.left" timestamp="1576430486098">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="220" key="GridCell.Tab.1.left/0.24.1366.693@0.24.1366.693" timestamp="1576430486098" />
+    <state width="1343" height="220" key="GridCell.Tab.1.right" timestamp="1576430486098">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state width="1343" height="220" key="GridCell.Tab.1.right/0.24.1366.693@0.24.1366.693" timestamp="1576430486098" />
+    <state x="344" y="185" key="com.intellij.ide.util.TipDialog" timestamp="1581954141007">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state x="344" y="185" key="com.intellij.ide.util.TipDialog/0.24.1366.693@0.24.1366.693" timestamp="1581954141007" />
+  </component>
+</project>
