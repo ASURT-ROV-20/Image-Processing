@@ -25,13 +25,14 @@ def color_compare(color1, color2):
     g = abs(int(color1[1]) - int(color2[1]))
     b = abs(int(color1[2]) - int(color2[2]))
     total = r+g+b
-    if r < 100 and g < 100 and b < 100:
+    if r < 50 and g < 50 and b < 50:
         print(color1)
         print(color2)
         print(total)
         print()
         return True
     else:
+        print(color1)
         print(color2)
         print("fail")
         return False
@@ -39,10 +40,10 @@ def color_compare(color1, color2):
 
 def get_colors(img):
     h, w, _ = img.shape
-    roiTop = img[0:int(h/20), int(w/2) - int(w/20):int(w/2) + int(w/20)]
-    roiBottom = img[18*int(h/20):h, int(w/2) - int(w/20):int(w/2) + int(w/20)]
-    roiLeft = img[int(h/2) - int(h/20):int(h/2) + int(h/20), 0:int(w/20)]
-    roiRight = img[int(h/2) - int(h/20):int(h/2) + int(h/20), 19*int(w/20):w]
+    roiTop = img[0:int(2*h/20), int(w/2) - int(w/20):int(w/2) + int(w/20)]
+    roiBottom = img[16*int(h/20):h, int(w/2) - int(w/20):int(w/2) + int(w/20)]
+    roiLeft = img[int(h/2) - int(h/20):int(h/2) + int(h/20), 0:int(2*w/20)]
+    roiRight = img[int(h/2) - int(h/20):int(h/2) + int(h/20), 16*int(w/20):w]
     b, g, r, _ = np.uint8(cv2.mean(roiTop))
     top = [r, g, b]
     b, g, r, _ = np.uint8(cv2.mean(roiBottom))
@@ -81,9 +82,12 @@ for i in range(0, 5):
     colors.append(get_colors(imgs[i]))
 
 
-# check bottom color to be not white (top side) and puts it in the beggining of the array
+# check bottom color to be not white (top side) and puts it in the beginning of the array
 for i in range(0, 5):
-    if not color_compare(colors[i][1], [255, 255, 255]):
+    h, w, _ = imgs[i].shape
+    roiCenter = imgs[i][int(h/3): int(2*h/3), int(w/3): int(2*w/3)]
+    b, g, r, _ = np.uint8(cv2.mean(roiCenter))
+    if not color_compare(colors[i][1], [r, g, b]):
         swap(0, i)
         break
 
@@ -108,7 +112,7 @@ for i in range(3, 5):
         break
 
 
-# get final image dimentions
+# get final image dimensions
 widthf = 0
 heightf = 0
 heightf, _, _ = imgs[0].shape
