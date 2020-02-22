@@ -19,31 +19,73 @@ class Movements(Enum):
     down = Quaternion(x=0, y=0, z=-1, w=0)
 
 
-def init_ros():
-    global rate
-    rospy.init_node('autonomous_node', anonymous=True)
-    rate = rospy.Rate(10)
-    rospy.init_node('autonomous_mission', anonymous=True)
-    # todo send ros msgs in a new thread
+class AutoMission:
+    ORIENTATION_THRESH = 3
+    DISTANCE_THRESH = 30
 
+    def __init__(self):
+        self.initial_state = True
+        self.orientation_error = 0
+        self.distance_error = 0
+        self.publisher = self.create_ros_publisher()
 
-def create_ros_publisher():
-    return rospy.Publisher("rov_velocity", Quaternion, queue_size=10)  # ? rospy queue size?
+        self.orientation_status = "initial_val"
+        self.distance_status = "initial_val"
+        self.init_ros()
+
+    @staticmethod
+    def create_ros_publisher():
+        return rospy.Publisher("rov_velocity", Quaternion, queue_size=10)  # ? rospy queue size?
+
+    def init_ros(self):
+        rospy.init_node('autonomous_node', anonymous=True)
+        self.rate = rospy.Rate(10)
+        rospy.init_node('autonomous_mission', anonymous=True)
+        # todo send ros msgs in a new thread
+
+    def check_orientation(self):
+        if self.orientation_error > self.ORIENTATION_THRESH:
+            self.publisher.publish(Movements.right_rotate)
+            self.orientation_status = "right " + str(self.orientation_error)
+            print(self.orientation_status)
+            return False
+            # print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
+
+        elif self.orientation_error < -1 * self.ORIENTATION_THRESH:
+            self.publisher.publish(Movements.right_rotate)
+            self.orientation_status = "left " + str(self.orientation_error)
+            print(self.orientation_status)
+            return False
+            # print(f"lef shmal {angles[1]}, {initial_angles}, {orientation_error}")
+
+        else:
+            self.orientation_status = "None"
+        return True
+
+    def check_distance(self):
+        if self.distance_error < -1 * self.DISTANCE_THRESH:
+            self.publisher.publish(Movements.up)
+            self.distance_status = "uppp " + str(self.distance_error)
+
+        elif self.distance_error > self.DISTANCE_THRESH:
+            self.publisher.publish(Movements.down)
+            self.distance_status = "down " + str(self.distance_error)
+
+        else:
+            self.publisher.publish(Movements.forward)
+            self.distance_status = "None"
+
+    def print_status(self):
+        print(self.distance_status, self.orientation_status)
 
 
 def main():
     global frame
-    initial_state = True
-    init_ros()
-    publisher = create_ros_publisher()
+    autonomous = AutoMission()
+
     # success, frame = video.read()
     success = True
 
-    # for prints
-    up = ""
-    right = ""
-    distance_threshold = 30
-    orientation_threshold = 3
     while not rospy.is_shutdown():  # while success  # todo publish in a thread
         success, frame = video.read()
         cnt1and2 = get_blue_line_contours(frame)
@@ -56,42 +98,23 @@ def main():
         distance = get_distance(cnt1, cnt2)
         angles = get_orientation(cnt1, cnt2)
         draw_contours(cnt1, cnt2)
-        if initial_state:
-            initial_state = False
+        if autonomous.initial_state:
+            autonomous.initial_state = False
             initial_distance = distance
             initial_angles = 90
+
         else:
-            distance_error = initial_distance - distance
-            orientation_error = initial_angles - angles[1]
-            if orientation_error > orientation_threshold:
-                publisher.publish(Movements.right_rotate)
-                right = "right " + str(orientation_error)
-                print(right)
+            autonomous.distance_error = initial_distance - distance
+            autonomous.orientation_error = initial_angles - angles[1]
+
+            rot_success = autonomous.check_orientation()
+            if not rot_success:
                 continue
-                # print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
-            elif orientation_error < -orientation_threshold:
-                publisher.publish(Movements.right_rotate)
-                right = "left " + str(orientation_error)
-                print(right)
-                continue
-                # print(f"lef shmal {angles[1]}, {initial_angles}, {orientation_error}")
-            else:
-                right = "None "
-                # print(f"dont change orientation yasta")
 
-            if distance_error < -distance_threshold:
-                publisher.publish(Movements.up)
-                up = "uppp " + str(distance_error)
+            autonomous.check_distance()
+            autonomous.print_status()
 
-            elif distance_error > distance_threshold:
-                publisher.publish(Movements.down)
-                up = "down " + str(distance_error)
-            else:
-                publisher.publish(Movements.forward)
-                up = "None"
-
-            print(up, right)
-        rate.sleep()  # ros
+        autonomous.rate.sleep()  # ros
     video.release()
     cv2.destroyAllWindows()
 
