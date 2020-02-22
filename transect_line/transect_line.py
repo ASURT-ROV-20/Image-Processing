@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 import math
 from enum import Enum
-import rospy
-from geometry_msgs.msg import Quaternion
+# import rospy
+# from geometry_msgs.msg import Quaternion
 
 # video = cv2.VideoCapture('udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! '
 #                          'decodebin ! videoconvert ! appsink', cv2.CAP_GSTREAMER)  # gstreamer
@@ -12,12 +12,12 @@ video = cv2.VideoCapture('my_vid.mp4')  # local video
 
 
 class Movements(Enum):
-    right_rotate = Quaternion(x=0, y=0, z=0, w=1)
-    left_rotate = Quaternion(x=0, y=0, z=0, w=-1)
-    forward = Quaternion(x=1, y=0, z=0, w=0)
-    up = Quaternion(x=0, y=0, z=1, w=1)
-    down = Quaternion(x=0, y=0, z=-1, w=0)
-
+    # right_rotate = Quaternion(x=0, y=0, z=0, w=1)
+    # left_rotate = Quaternion(x=0, y=0, z=0, w=-1)
+    # forward = Quaternion(x=1, y=0, z=0, w=0)
+    # up = Quaternion(x=0, y=0, z=1, w=1)
+    # down = Quaternion(x=0, y=0, z=-1, w=0)
+    pass
 
 class AutoMission:
     ORIENTATION_THRESH = 3
@@ -27,32 +27,32 @@ class AutoMission:
         self.initial_state = True
         self.orientation_error = 0
         self.distance_error = 0
-        self.publisher = self.create_ros_publisher()
+        # self.publisher = self.create_ros_publisher()
 
         self.orientation_status = "initial_val"
         self.distance_status = "initial_val"
-        self.init_ros()
+        # self.init_ros()
 
-    @staticmethod
-    def create_ros_publisher():
-        return rospy.Publisher("rov_velocity", Quaternion, queue_size=10)  # ? rospy queue size?
+    # @staticmethod
+    # def create_ros_publisher():
+        # return rospy.Publisher("rov_velocity", Quaternion, queue_size=10)  # ? rospy queue size?
 
-    def init_ros(self):
-        rospy.init_node('autonomous_node', anonymous=True)
-        self.rate = rospy.Rate(10)
-        rospy.init_node('autonomous_mission', anonymous=True)
+    # def init_ros(self):
+        # rospy.init_node('autonomous_node', anonymous=True)
+        # self.rate = rospy.Rate(10)
+        # rospy.init_node('autonomous_mission', anonymous=True)
         # todo send ros msgs in a new thread
 
     def check_orientation(self):
         if self.orientation_error > self.ORIENTATION_THRESH:
-            self.publisher.publish(Movements.right_rotate)
+            # self.publisher.publish(Movements.right_rotate)
             self.orientation_status = "right " + str(self.orientation_error)
             print(self.orientation_status)
             return False
             # print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
 
         elif self.orientation_error < -1 * self.ORIENTATION_THRESH:
-            self.publisher.publish(Movements.right_rotate)
+            # self.publisher.publish(Movements.right_rotate)
             self.orientation_status = "left " + str(self.orientation_error)
             print(self.orientation_status)
             return False
@@ -64,15 +64,15 @@ class AutoMission:
 
     def check_distance(self):
         if self.distance_error < -1 * self.DISTANCE_THRESH:
-            self.publisher.publish(Movements.up)
+            # self.publisher.publish(Movements.up)
             self.distance_status = "uppp " + str(self.distance_error)
 
         elif self.distance_error > self.DISTANCE_THRESH:
-            self.publisher.publish(Movements.down)
+            # self.publisher.publish(Movements.down)
             self.distance_status = "down " + str(self.distance_error)
 
         else:
-            self.publisher.publish(Movements.forward)
+            # self.publisher.publish(Movements.forward)
             self.distance_status = "None"
 
     def print_status(self):
@@ -86,7 +86,7 @@ def main():
     # success, frame = video.read()
     success = True
 
-    while not rospy.is_shutdown():  # while success  # todo publish in a thread
+    while success:  # todo publish in a thread
         success, frame = video.read()
         cnt1and2 = get_blue_line_contours(frame)
         if cnt1and2 is None or len(cnt1and2) < 2:
@@ -114,7 +114,7 @@ def main():
             autonomous.check_distance()
             autonomous.print_status()
 
-        autonomous.rate.sleep()  # ros
+        # autonomous.rate.sleep()  # ros
     video.release()
     cv2.destroyAllWindows()
 
@@ -130,7 +130,7 @@ def draw_contours(cnt1, cnt2):
     mask = np.zeros(frame.shape, np.uint8)
     cv2.drawContours(mask, [cnt1, cnt2], -1, (0, 255, 0), 1)
     cv2.imshow("test", mask)
-    cv2.waitKey(2)
+    cv2.waitKey(10)
 
 
 def get_blue_mask(frame):
