@@ -136,79 +136,104 @@ def process_colar(image):
     ######################################################################################################
 
 
-
+## abstracted : abs, coordinate: coord # to avoid long names :')
 def main():
-    image = cv2.imread("destination.PNG")
-    abstracted_coral1, abstracted_coral_white1, abstracted_coral1_x1, abstracted_coral1_x2, abstracted_coral1_y = process_colar(image)
-    abstracted_coral1_distance = abs(abstracted_coral1_x1 - abstracted_coral1_x2)
-    y, x, _ = image.shape
-    # cv2.circle(abstracted_coral1,(abstracted_coral1_x1,abstracted_coral1_y),3,(0,0,255),2)
-    # cv2.circle(abstracted_coral1,(abstracted_coral1_x2,abstracted_coral1_y),3,(0,0,255),2)
+    old_image = cv2.imread("destination.PNG")
+    absOldCoral, absOldCoral_pinkMask, absOldCoral_firstRoot_xCoord,\
+     absOldCoral_secondRoot_xCoord, absOldCoral_roots_yCoord = process_colar(old_image)
+    
+    absOldCoral_distance = abs(absOldCoral_firstRoot_xCoord - absOldCoral_secondRoot_xCoord)
+    y, x, _ = old_image.shape
 
-    tx = 500 - 1 * abstracted_coral1_x1
-    ty = 500 - 1 * abstracted_coral1_y
+    tx = 500 - 1 * absOldCoral_firstRoot_xCoord
+    ty = 500 - 1 * absOldCoral_roots_yCoord
     T = np.float32([[1, 0, tx], [0, 1, ty]]) 
 
-    img_translationX = cv2.warpAffine(abstracted_coral1, T, (1000, 1000))
-    img_translationX_white = cv2.warpAffine(abstracted_coral_white1, T, (1000, 1000))
+    # translated: trans
+    trans_absOldCoral = cv2.warpAffine(absOldCoral, T, (1000, 1000))
+    trans_absOldCoral_pinkMask = cv2.warpAffine(absOldCoral_pinkMask, T, (1000, 1000))
 
     image = cv2.imread("2.png")
-    abstracted_coral2, abstracted_coral_white2, abstracted_coral2_x1, abstracted_coral2_x2, abstracted_coral2_y = process_colar(image)
-    abstracted_coral2_distance = abs(abstracted_coral2_x1 - abstracted_coral2_x2)
-    print(abstracted_coral1_distance,abstracted_coral2_distance)
-    # cv2.circle(abstracted_coral2,(abstracted_coral2_x1,abstracted_coral2_y),3,(0,0,255),2)
-    # cv2.circle(abstracted_coral2,(abstracted_coral2_x2,abstracted_coral2_y),3,(0,0,255),2)
+    absNewCoral, absNewCoral_pinkMask, absNewCoral_firstRoot_xCoord,\
+     absNewCoral_secondtRoot_xCoord, absNewCoral_roots_yCoord = process_colar(image)
 
-    scale_factor = abstracted_coral1_distance/abstracted_coral2_distance
-    height, width, _ = abstracted_coral2.shape
-    scaled_abstracted_coral2 = cv2.resize(abstracted_coral2,(int(scale_factor*width),int(scale_factor*height)))
-    _,scaled_abstracted_coral2 = cv2.threshold(scaled_abstracted_coral2,10,255,cv2.THRESH_BINARY)
+    absNewCoral_distance = abs(absNewCoral_firstRoot_xCoord - absNewCoral_secondtRoot_xCoord)
+    print(absOldCoral_distance,absNewCoral_distance)
 
-    scaled_abstracted_coral_white2 = cv2.resize(abstracted_coral_white2,(int(scale_factor*width),int(scale_factor*height)))
-    _,scaled_abstracted_coral_white2 = cv2.threshold(scaled_abstracted_coral_white2,10,255,cv2.THRESH_BINARY)
+    scaleFactor = absOldCoral_distance/absNewCoral_distance
+    height, width, _ = absNewCoral.shape
+    scaled_absNewCoral = cv2.resize(absNewCoral,(int(scaleFactor*width),int(scaleFactor*height)))
+    _,scaled_absNewCoral = cv2.threshold(scaled_absNewCoral,10,255,cv2.THRESH_BINARY)
+
+    scaled_absNewCoral_pinkMask = cv2.resize(absNewCoral_pinkMask,(int(scaleFactor*width),int(scaleFactor*height)))
+    _,scaled_absNewCoral_pinkMask = cv2.threshold(scaled_absNewCoral_pinkMask,10,255,cv2.THRESH_BINARY)
 
 
-    tx = 500 - scale_factor * abstracted_coral2_x1
-    ty = 500 - scale_factor * abstracted_coral2_y
+    tx = 500 - scaleFactor * absNewCoral_firstRoot_xCoord
+    ty = 500 - scaleFactor * absNewCoral_roots_yCoord
     T = np.float32([[1, 0, tx], [0, 1, ty]]) 
 
-    img_translation = cv2.warpAffine(scaled_abstracted_coral2, T, (1000, 1000))
-    img_translation_white = cv2.warpAffine(scaled_abstracted_coral_white2, T, (1000, 1000))
-
-    
-    # result = abstracted_coral1 - img_translation
+    trans_absNewCoral = cv2.warpAffine(scaled_absNewCoral, T, (1000, 1000))
+    trans_absNewCoral_pinkMask = cv2.warpAffine(scaled_absNewCoral_pinkMask, T, (1000, 1000))
 
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(11,11))
-    result = cv2.erode(img_translation - img_translationX ,kernel)
-    result_white = cv2.erode(img_translation_white - img_translationX_white - result ,kernel)
-    # cv2.imshow("destination",abstracted_coral1)
-    # cv2.imshow("transformed",img_translation_white)
-    # cv2.imshow("result", result)
-    cv2.imshow("result White", result_white)
-    # cv2.imshow("WMASK OLD", abstracted_coral_white1)
-    # cv2.imshow("WMASK NEW", abstracted_coral_white2)
-    # cv2.imshow("result",result)
+    growthResult = cv2.erode(trans_absNewCoral - trans_absOldCoral ,kernel)
+    deathResult = cv2.erode(trans_absOldCoral - trans_absNewCoral ,kernel)
+    recoveryResult = cv2.erode(trans_absNewCoral_pinkMask - trans_absOldCoral_pinkMask - growthResult ,kernel)
+    bleachingResult = cv2.erode(trans_absOldCoral_pinkMask - trans_absNewCoral_pinkMask - deathResult ,kernel)
+
+    resultImage = cv2.resize(image,(int(scaleFactor*width),int(scaleFactor*height)))
+    resultImage = cv2.warpAffine(resultImage, T, (1000, 1000))
+    cv2.imshow("Original", resultImage)
     cv2.waitKey(0)
 
-    img = cv2.warpAffine(image, T, (1000, 1000))
-    cv2.imshow("Original", img)
-    cv2.waitKey(0)
+    # death results
+    _, deathBinary = cv2.threshold(cv2.cvtColor(growthResult, cv2.COLOR_BGR2GRAY),10,255,cv2.THRESH_BINARY)
+    deathContours, _= cv2.findContours(deathBinary,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(resultImage, deathContours, -1, (125,125,125), 3)
+    deathResultsRec = []
+    for i in deathContours :
+        deathResultsRec.append(cv2.boundingRect(i))
+    print(deathResultsRec)
+    for i in range(len(deathResultsRec)):
+        cv2.rectangle(resultImage, (int(deathResultsRec[i][0]), int(deathResultsRec[i][1])), \
+            (int(deathResultsRec[i][0]+deathResultsRec[i][2]), int(deathResultsRec[i][1]+deathResultsRec[i][3])), (0,255,255), 2)
+    # growth results
+    _, growthBinary = cv2.threshold(cv2.cvtColor(growthResult, cv2.COLOR_BGR2GRAY),10,255,cv2.THRESH_BINARY)
+    growthContours, _= cv2.findContours(growthBinary,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(resultImage, growthContours, -1, (125,125,125), 3)
+    growthResultsRec = []
+    for i in growthContours :
+        growthResultsRec.append(cv2.boundingRect(i))
+    print(growthResultsRec)
+    for i in range(len(growthResultsRec)):
+        cv2.rectangle(resultImage, (int(growthResultsRec[i][0]), int(growthResultsRec[i][1])), \
+            (int(growthResultsRec[i][0]+growthResultsRec[i][2]), int(growthResultsRec[i][1]+growthResultsRec[i][3])), (0,255,0), 2)
+    # recovery results
+    _, recoveryBinary = cv2.threshold(cv2.cvtColor(recoveryResult, cv2.COLOR_BGR2GRAY),10,255,cv2.THRESH_BINARY)
+    recoveryContours, _= cv2.findContours(recoveryBinary,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(resultImage, recoveryContours, -1, (125,125,125), 3)
+    recoveryResultsRec = []
+    for i in recoveryContours :
+        recoveryResultsRec.append(cv2.boundingRect(i))
+    print(recoveryResultsRec)
+    for i in range(len(recoveryResultsRec)):
+        cv2.rectangle(resultImage, (int(recoveryResultsRec[i][0]), int(recoveryResultsRec[i][1])), \
+            (int(recoveryResultsRec[i][0]+recoveryResultsRec[i][2]), int(recoveryResultsRec[i][1]+recoveryResultsRec[i][3])), (255,0,0), 2)
+    # bleaching results
+    _, bleachingBinary = cv2.threshold(cv2.cvtColor(bleachingResult, cv2.COLOR_BGR2GRAY),10,255,cv2.THRESH_BINARY)
+    bleachingContours, _= cv2.findContours(bleachingBinary,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(resultImage, bleachingContours, -1, (125,125,125), 3)
+    bleachingResultsRec = []
+    for i in bleachingContours :
+        bleachingResultsRec.append(cv2.boundingRect(i))
+    print(bleachingResultsRec)
+    for i in range(len(bleachingResultsRec)):
+        cv2.rectangle(resultImage, (int(bleachingResultsRec[i][0]), int(bleachingResultsRec[i][1])), \
+            (int(bleachingResultsRec[i][0]+bleachingResultsRec[i][2]), int(bleachingResultsRec[i][1]+bleachingResultsRec[i][3])), (0,0,255), 2)
 
-    binary = cv2.cvtColor(result_white, cv2.COLOR_BGR2GRAY)
-    _, binary = cv2.threshold(binary,10,255,cv2.THRESH_BINARY)
-
-    print(binary.shape)
-    cott, _= cv2.findContours(binary,mode = cv2.RETR_EXTERNAL, method = cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(img, cott, -1, (0,255,0), 3)
-    cv2.imshow("Original", img)
-    cv2.waitKey(0)
-    resultsRec = []
-    for a in cott :
-        resultsRec.append(cv2.boundingRect(a))
-    print(resultsRec)
-    x,y,w,h = resultsRec[1]
-    cv2.rectangle(img,(y, x) , (h, w), (0,0,255), 5 )
-    cv2.imshow("Original", img)
+    
+    cv2.imshow("Original", resultImage)
     cv2.waitKey(0)
     
 if __name__== "__main__":
@@ -230,3 +255,14 @@ if __name__== "__main__":
 #           (int(boundRect[i][0]+boundRect[i][2]), int(boundRect[i][1]+boundRect[i][3])), (0,0,255), 2)
 
 # cv2.drawContours(image, hor_contours, -1, (0,255,0), 9)
+
+    # cv2.circle(absOldCoral,(absOldCoral_firstRoot_xCoord,absOldCoral_roots_yCoord),3,(0,0,255),2)
+    # cv2.circle(absOldCoral,(absOldCoral_secondRoot_xCoord,absOldCoral_roots_yCoord),3,(0,0,255),2)
+    # cv2.circle(absNewCoral,(absNewCoral_firstRoot_xCoord,absNewCoral_roots_yCoord),3,(0,0,255),2)
+    # cv2.circle(absNewCoral,(absNewCoral_secondtRoot_xCoord,absNewCoral_roots_yCoord),3,(0,0,255),2)
+    # cv2.imshow("destination",absOldCoral)
+    # cv2.imshow("transformed",trans_absNewCoral_pinkMask)
+    # cv2.imshow("result", result)
+    # cv2.imshow("WMASK OLD", absOldCoral_pinkMask)
+    # cv2.imshow("WMASK NEW", absNewCoral_pinkMask)
+    # cv2.imshow("result",result)
