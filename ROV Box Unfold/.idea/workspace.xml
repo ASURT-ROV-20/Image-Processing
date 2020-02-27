@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="108044e4-ab2b-4915-ad50-a3dd988783e9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ROV Box Unfold.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ROV Box Unfold.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Stitching.py" beforeDir="false" afterPath="$PROJECT_DIR$/Stitching.py" afterDir="false" />
     </list>
@@ -116,10 +117,10 @@
       <screen x="0" y="24" width="1366" height="693" />
     </state>
     <state width="1343" height="220" key="GridCell.Tab.1.right/0.24.1366.693@0.24.1366.693" timestamp="1576430486098" />
-    <state x="176" y="24" key="SettingsEditor" timestamp="1582810318643">
+    <state x="176" y="24" key="SettingsEditor" timestamp="1582824286202">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state x="176" y="24" key="SettingsEditor/0.24.1366.693@0.24.1366.693" timestamp="1582810318643" />
+    <state x="176" y="24" key="SettingsEditor/0.24.1366.693@0.24.1366.693" timestamp="1582824286202" />
     <state x="344" y="185" key="com.intellij.ide.util.TipDialog" timestamp="1582810217425">
       <screen x="0" y="24" width="1366" height="693" />
     </state>

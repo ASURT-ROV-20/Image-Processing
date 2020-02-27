@@ -187,7 +187,7 @@ for i in range(0, 5):
     w, h, _ = imgs[i].shape
     cv2.putText(imgs[i], str(i), ((h/2), (w/2)), cv2.FONT_HERSHEY_COMPLEX, 0.5, (50, 50, 50), 1)
 
-# get final image dimentions
+# get final image dimensions
 widthf = 0
 heightf, _, _ = imgs[0].shape
 h, _, _ = imgs[2].shape
