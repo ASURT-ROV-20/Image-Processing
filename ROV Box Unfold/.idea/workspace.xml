@@ -2,15 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="108044e4-ab2b-4915-ad50-a3dd988783e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/ROV Box Unfold.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ROV Box Unfold.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box3.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box4.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box5.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box5.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Boxie.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Subwaycar.updated pics1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images2/Box1.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images2/Box2.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images2/Box3.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images2/Box4.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images2/Box5.JPG" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Stitching.py" beforeDir="false" afterPath="$PROJECT_DIR$/Stitching.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -25,20 +42,41 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Mission View.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager">
-    <configuration name="Stitching" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.Stitching">
+    <configuration name="Mission View" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="ROV Box Unfold" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="SDK_HOME" value="/usr/bin/python2.7" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Mission View.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Stitching" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="ROV Box Unfold" />
+      <option name="INTERPRETER_OPTIONS" value="-O" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Stitching.py" />
@@ -50,6 +88,10 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.Stitching" />
+      <item itemvalue="Python.Mission View" />
+    </list>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -77,30 +119,30 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="146" y="24" width="1073" height="693" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582822323453">
+    <state x="146" y="24" width="1073" height="693" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583018894658">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state x="146" y="24" width="1073" height="693" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.24.1366.693@0.24.1366.693" timestamp="1582822323453" />
-    <state x="469" y="124" key="FileChooserDialogImpl" timestamp="1576367082076">
+    <state x="146" y="24" width="1073" height="693" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.24.1366.693@0.24.1366.693" timestamp="1583018894658" />
+    <state x="469" y="124" key="FileChooserDialogImpl" timestamp="1582981644355">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state x="469" y="124" key="FileChooserDialogImpl/0.24.1366.693@0.24.1366.693" timestamp="1576367082076" />
-    <state width="1343" height="188" key="GridCell.Tab.0.bottom" timestamp="1582822520445">
+    <state x="469" y="124" key="FileChooserDialogImpl/0.24.1366.693@0.24.1366.693" timestamp="1582981644355" />
+    <state width="1343" height="194" key="GridCell.Tab.0.bottom" timestamp="1583019046171">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="188" key="GridCell.Tab.0.bottom/0.24.1366.693@0.24.1366.693" timestamp="1582822520445" />
-    <state width="1343" height="188" key="GridCell.Tab.0.center" timestamp="1582822520443">
+    <state width="1343" height="194" key="GridCell.Tab.0.bottom/0.24.1366.693@0.24.1366.693" timestamp="1583019046171" />
+    <state width="1343" height="194" key="GridCell.Tab.0.center" timestamp="1583019046170">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="188" key="GridCell.Tab.0.center/0.24.1366.693@0.24.1366.693" timestamp="1582822520443" />
-    <state width="1343" height="188" key="GridCell.Tab.0.left" timestamp="1582822520443">
+    <state width="1343" height="194" key="GridCell.Tab.0.center/0.24.1366.693@0.24.1366.693" timestamp="1583019046170" />
+    <state width="1343" height="194" key="GridCell.Tab.0.left" timestamp="1583019046169">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="188" key="GridCell.Tab.0.left/0.24.1366.693@0.24.1366.693" timestamp="1582822520443" />
-    <state width="1343" height="188" key="GridCell.Tab.0.right" timestamp="1582822520444">
+    <state width="1343" height="194" key="GridCell.Tab.0.left/0.24.1366.693@0.24.1366.693" timestamp="1583019046169" />
+    <state width="1343" height="194" key="GridCell.Tab.0.right" timestamp="1583019046170">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="188" key="GridCell.Tab.0.right/0.24.1366.693@0.24.1366.693" timestamp="1582822520444" />
+    <state width="1343" height="194" key="GridCell.Tab.0.right/0.24.1366.693@0.24.1366.693" timestamp="1583019046170" />
     <state width="1343" height="220" key="GridCell.Tab.1.bottom" timestamp="1576430486098">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
@@ -121,9 +163,13 @@
       <screen x="0" y="24" width="1366" height="693" />
     </state>
     <state x="176" y="24" key="SettingsEditor/0.24.1366.693@0.24.1366.693" timestamp="1582824286202" />
-    <state x="344" y="185" key="com.intellij.ide.util.TipDialog" timestamp="1582810217425">
+    <state x="344" y="185" key="com.intellij.ide.util.TipDialog" timestamp="1583007402439">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state x="344" y="185" key="com.intellij.ide.util.TipDialog/0.24.1366.693@0.24.1366.693" timestamp="1582810217425" />
+    <state x="344" y="185" key="com.intellij.ide.util.TipDialog/0.24.1366.693@0.24.1366.693" timestamp="1583007402439" />
+    <state x="346" y="38" width="672" height="678" key="search.everywhere.popup" timestamp="1582979541997">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state x="346" y="38" width="672" height="678" key="search.everywhere.popup/0.24.1366.693@0.24.1366.693" timestamp="1582979541997" />
   </component>
 </project>
