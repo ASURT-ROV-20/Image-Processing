@@ -101,35 +101,75 @@ def edge_detect(frame):
 
 
 def color_compare(color1, color2):
-    r = abs(int(color1[0]) - int(color2[0]))
-    g = abs(int(color1[1]) - int(color2[1]))
-    b = abs(int(color1[2]) - int(color2[2]))
-    if r < 50 and g < 50 and b < 50:
+    h = abs(int(color1[0]) - int(color2[0]))
+    s = abs(int(color1[1]) - int(color2[1]))
+    v = abs(int(color1[2]) - int(color2[2]))
+    if h < 20 and s < 50 and v < 50:
         return True
     else:
         return False
 
 
 def get_colors(imgc, cnts):
+    hsv = cv2.cvtColor(imgc, cv2.COLOR_BGR2HSV)
     hc, wc, _ = imgc.shape
-    # sample colors from all sides of the box and its center
-    roiTop = imgc[0:int(hc/20), int(wc/2) - int(wc/20):int(wc/2) + int(wc/20)]
-    roiBottom = imgc[18*int(hc/20):hc, int(wc/2) - int(wc/20):int(wc/2) + int(wc/20)]
-    roiLeft = imgc[int(hc/2) - int(hc/20):int(hc/2) + int(hc/20), 0:int(wc/20)]
-    roiRight = imgc[int(hc/2) - int(hc/20):int(hc/2) + int(hc/20), 19*int(wc/20):wc]
-    roiCenter = imgc[int(hc / 2) - int(hc / 30):int(hc / 2) + int(hc / 30), int(wc / 2) - int(wc / 30):int(wc / 2) + int(wc / 30)]
-    # get the mean color of the sampling area
-    b, g, r, _ = np.uint8(cv2.mean(roiTop))
-    top = [r, g, b]
-    b, g, r, _ = np.uint8(cv2.mean(roiBottom))
-    bottom = [r, g, b]
-    b, g, r, _ = np.uint8(cv2.mean(roiRight))
-    right = [r, g, b]
-    b, g, r, _ = np.uint8(cv2.mean(roiLeft))
-    left = [r, g, b]
-    b, g, r, _ = np.uint8(cv2.mean(roiCenter))
-    center = [r, g, b]
-    return [top, bottom, left, right, center]
+
+    roiCenter = hsv[int(hc / 2) - int(hc / 30):int(hc / 2) + int(hc / 30), int(wc / 2) - int(wc / 30):int(wc / 2) + int(wc / 30)]
+    h, s, v, _ = np.uint8(cv2.mean(roiCenter))
+    center = [h, s, v]
+
+    top = center
+    bottom = center
+    left = center
+    right = center
+
+    if __debug__: print("image h= "+str(hc)+" | w= "+str(wc))
+
+    for cnt in cnts:
+        mask = np.zeros(imgc.shape[:2], dtype=np.uint8)
+        cv2.drawContours(mask, [cnt], -1, (255, 255, 255), -1)
+        h, s, v, _ = cv2.mean(hsv, mask=mask)
+        M = cv2.moments(cnt)
+        cX = int(M["m10"] / M["m00"])
+        cY = int(M["m01"] / M["m00"])
+
+        # DEBUG !!!!
+        if __debug__:
+            temp = imgc.copy()
+            color = np.zeros(temp.shape, temp.dtype)
+            color[:, :] = (0, 255, 0)
+            maskoverlay = np.bitwise_and(color, mask[:, :, np.newaxis])
+            cv2.addWeighted(temp, 0.5, maskoverlay, 1, 1, temp)
+            cv2.putText(temp, "Color mask", (50, 50), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 1, 1)
+            print("Y pos: " + str(cY) + " | X pos: " + str(cX) + " | color:" + str(h) + ", " + str(s) + ", " + str(v))
+            cv2.imshow("Debug", temp)
+            cv2.waitKey(0)
+
+        if (cX-(wc/2)) < (wc/10):
+            if cY < (hc/2):
+                # top
+                print "top"
+                top = [h, s, v]
+                pass
+            else:
+                # bottom
+                print "bottom"
+                bottom = [h, s, v]
+                pass
+        elif cX < (wc/2):
+            # left
+            print "left"
+            left = [h, s, v]
+            pass
+        else:
+            # right
+            print "right"
+            right = [h, s, v]
+            pass
+
+    output = [top, bottom, left, right, center]
+    print output
+    return output
 
 
 imgs = []
@@ -139,7 +179,7 @@ startTime = time.time()
 
 # load images from file
 for i in range(1, 6):
-    img = cv2.imread("./Images/Box" + str(i) + ".jpg")
+    img = cv2.imread("./Images3/Box" + str(i) + ".jpg")
     imgs.append(img)
 
 # extract boxes from images
@@ -149,13 +189,13 @@ for i in range(0, 5):
     # edges
     outerEdge, colorsEdges = edge_detect(imgs[i])
     # find the box contour
-    cnts_b, _ = cv2.findContours(outerEdge, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnts_b, _ = cv2.findContours(outerEdge, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     # SORT
     cnts_b = sorted(cnts_b, key=cv2.contourArea, reverse=True)
     # Get box contour
     box_cnt = cnts_b[0]
     # find colors contours
-    cnts_c, _ = cv2.findContours(colorsEdges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnts_c, _ = cv2.findContours(colorsEdges, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     # remove box contour
     cnts_c = sorted(cnts_c, key=cv2.contourArea, reverse=True)
     cnts_c = cnts_c[2:]
@@ -169,6 +209,9 @@ for i in range(0, 5):
         cv2.imshow("Debug", temp)
         cv2.waitKey(0)
     # DEBUG !!!!
+
+    # Get and append box colors to their array
+    colors.append(get_colors(imgs[i], cnts_c))
 
     # Approximate contour to rectangle (hopefully)
     epsilon = 0.07 * cv2.arcLength(box_cnt, True)
@@ -204,8 +247,6 @@ for i in range(0, 5):
     # Get and apply perspective warp correction
     M = cv2.getPerspectiveTransform(rect, dst)
     imgs[i] = cv2.warpPerspective(imgs[i], M, (maxWidth, maxHeight))
-    # Get and append box colors to their array
-    colors.append(get_colors(imgs[i], cnts_c))
 
 
 # check bottom color to be not white (top side) and puts it in the beginning of the array
