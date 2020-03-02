@@ -49,14 +49,14 @@ class AutoMission:
     def check_orientation(self):
         if self.orientation_error > self.ORIENTATION_THRESH:
             self.publisher.publish(Movements.right_rotate)
-            self.orientation_status = "right " + str(map(self.orientation_error,self.ORIENTATION_LEFT_MIN,self.ORIENTATION_RIGHT_MAX,-1,1))
+            self.orientation_status = "right " + str(translate(self.orientation_error,self.ORIENTATION_LEFT_MIN,self.ORIENTATION_RIGHT_MAX,-1,1))
             print(self.orientation_status)
             return False
             # print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
 
         elif self.orientation_error < -1 * self.ORIENTATION_THRESH:
             self.publisher.publish(Movements.right_rotate)
-            self.orientation_status = "left " + str(map(self.orientation_error,self.ORIENTATION_LEFT_MIN,self.ORIENTATION_RIGHT_MAX,-1,1))
+            self.orientation_status = "left " + str(translate(self.orientation_error,self.ORIENTATION_LEFT_MIN,self.ORIENTATION_RIGHT_MAX,-1,1))
             print(self.orientation_status)
             return False
             # print(f"lef shmal {angles[1]}, {initial_angles}, {orientation_error}")
@@ -68,11 +68,11 @@ class AutoMission:
     def check_distance(self):
         if self.distance_error < -1 * self.DISTANCE_THRESH:
             self.publisher.publish(Movements.up)
-            self.distance_status = "uppp " + str(map(self.distance_error,self.DISTANCE_DOWN_MIN,self.DISTANCE_UP_MAX,-1,1 ))
+            self.distance_status = "uppp " + str(translate(self.distance_error,self.DISTANCE_DOWN_MIN,self.DISTANCE_UP_MAX,-1,1 ))
 
         elif self.distance_error > self.DISTANCE_THRESH:
             self.publisher.publish(Movements.down)
-            self.distance_status = "down " + str(map(self.distance_error,self.DISTANCE_DOWN_MIN,self.DISTANCE_UP_MAX,-1,1 ))
+            self.distance_status = "down " + str(translate(self.distance_error,self.DISTANCE_DOWN_MIN,self.DISTANCE_UP_MAX,-1,1 ))
 
         else:
             self.publisher.publish(Movements.forward)
@@ -186,7 +186,7 @@ def get_orientation_from_contour(cnt1):
         orientation = orientation - 90
     return abs(orientation)
 
-def map(value, leftMin, leftMax, rightMin, rightMax):
+def translate(value, leftMin, leftMax, rightMin, rightMax):
     # Figure out how 'wide' each range is
     leftSpan = leftMax - leftMin
     rightSpan = rightMax - rightMin
