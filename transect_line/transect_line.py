@@ -1,17 +1,18 @@
-import cv2
 import numpy as np
 import math
 from enum import Enum
 import rospy
 from geometry_msgs.msg import Quaternion
-
+import sys
+sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+import cv2
+print(cv2.getBuildInformation())
 gstreamer_str = 'udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! ' \
                 'decodebin ! videoconvert ! appsink'
 
 gstreamer_str = "rtspsrc location=rtsp://admin:123456@10.42.0.13/media/video1 latency=0 " \
                 "drop-on-latency=true max-rtcp-rtp-time-diff=50 protocols=udp-mcast+udp ! " \
-                "rtph265depay ! avdec_h265 ! autovideoconvert ! xvimagesink  name=mySink " \
-                "force-aspect-ratio=false sync=false enable-last-sample=true",
+                "rtph265depay ! avdec_h265 ! autovideosink"
 video = cv2.VideoCapture(gstreamer_str, cv2.CAP_GSTREAMER)  # gstreamer
 
 
@@ -50,10 +51,10 @@ class AutoMission:
         return rospy.Publisher("rov_velocity", Quaternion, queue_size=10)  # ? rospy queue size?
 
     def init_ros(self):
-        self.rate = rospy.Rate(10)
         rospy.init_node('autonomous_mission', anonymous=True)
         # todo send ros msgs in a new thread
-
+        self.rate = rospy.Rate(10)
+        
     def check_orientation(self):
         if self.orientation_error > self.ORIENTATION_THRESH:
             self.publisher.publish(Movements.right_rotate)
