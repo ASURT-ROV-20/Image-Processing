@@ -5,10 +5,18 @@ from enum import Enum
 import rospy
 from geometry_msgs.msg import Quaternion
 
-# video = cv2.VideoCapture('udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! '
-#                          'decodebin ! videoconvert ! appsink', cv2.CAP_GSTREAMER)  # gstreamer
+gstreamer_str = 'udpsrc port=8000 ! application/x-rtp,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! ' \
+                'decodebin ! videoconvert ! appsink'
+
+gstreamer_str = "rtspsrc location=rtsp://admin:123456@10.42.0.13/media/video1 latency=0 " \
+                "drop-on-latency=true max-rtcp-rtp-time-diff=50 protocols=udp-mcast+udp ! " \
+                "rtph265depay ! avdec_h265 ! autovideoconvert ! xvimagesink  name=mySink " \
+                "force-aspect-ratio=false sync=false enable-last-sample=true",
+video = cv2.VideoCapture(gstreamer_str, cv2.CAP_GSTREAMER)  # gstreamer
+
+
 # video = cv2.VideoCapture('http://192.168.1.151:8080/video')  # http
-video = cv2.VideoCapture('my_vid.mp4')  # local video
+# video = cv2.VideoCapture('my_vid.mp4')  # local video
 
 
 class Movements(Enum):
@@ -26,6 +34,7 @@ class AutoMission:
     ORIENTATION_RIGHT_MAX = 90
     DISTANCE_UP_MAX = 100
     DISTANCE_DOWN_MIN = -100
+
     def __init__(self):
         self.initial_state = True
         self.orientation_error = 0
@@ -41,7 +50,6 @@ class AutoMission:
         return rospy.Publisher("rov_velocity", Quaternion, queue_size=10)  # ? rospy queue size?
 
     def init_ros(self):
-        rospy.init_node('autonomous_node', anonymous=True)
         self.rate = rospy.Rate(10)
         rospy.init_node('autonomous_mission', anonymous=True)
         # todo send ros msgs in a new thread
@@ -49,14 +57,16 @@ class AutoMission:
     def check_orientation(self):
         if self.orientation_error > self.ORIENTATION_THRESH:
             self.publisher.publish(Movements.right_rotate)
-            self.orientation_status = "right " + str(translate(self.orientation_error,self.ORIENTATION_LEFT_MIN,self.ORIENTATION_RIGHT_MAX,-1,1))
+            self.orientation_status = "right " + str(
+                translate(self.orientation_error, self.ORIENTATION_LEFT_MIN, self.ORIENTATION_RIGHT_MAX, -1, 1))
             print(self.orientation_status)
             return False
             # print(f"lef ymeen {angles[1]}, {initial_angles}, {orientation_error}")
 
         elif self.orientation_error < -1 * self.ORIENTATION_THRESH:
             self.publisher.publish(Movements.right_rotate)
-            self.orientation_status = "left " + str(translate(self.orientation_error,self.ORIENTATION_LEFT_MIN,self.ORIENTATION_RIGHT_MAX,-1,1))
+            self.orientation_status = "left " + str(
+                translate(self.orientation_error, self.ORIENTATION_LEFT_MIN, self.ORIENTATION_RIGHT_MAX, -1, 1))
             print(self.orientation_status)
             return False
             # print(f"lef shmal {angles[1]}, {initial_angles}, {orientation_error}")
@@ -68,11 +78,13 @@ class AutoMission:
     def check_distance(self):
         if self.distance_error < -1 * self.DISTANCE_THRESH:
             self.publisher.publish(Movements.up)
-            self.distance_status = "uppp " + str(translate(self.distance_error,self.DISTANCE_DOWN_MIN,self.DISTANCE_UP_MAX,-1,1 ))
+            self.distance_status = "uppp " + str(
+                translate(self.distance_error, self.DISTANCE_DOWN_MIN, self.DISTANCE_UP_MAX, -1, 1))
 
         elif self.distance_error > self.DISTANCE_THRESH:
             self.publisher.publish(Movements.down)
-            self.distance_status = "down " + str(translate(self.distance_error,self.DISTANCE_DOWN_MIN,self.DISTANCE_UP_MAX,-1,1 ))
+            self.distance_status = "down " + str(
+                translate(self.distance_error, self.DISTANCE_DOWN_MIN, self.DISTANCE_UP_MAX, -1, 1))
 
         else:
             self.publisher.publish(Movements.forward)
@@ -138,7 +150,7 @@ def draw_contours(cnt1, cnt2):
 
 def get_blue_mask(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_blue = np.array([90, 50, 50])
+    lower_blue = np.array([90, 100, 130])
     upper_blue = np.array([130, 255, 255])
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
     ret, thresh = cv2.threshold(mask, 127, 255, 0)
@@ -186,6 +198,7 @@ def get_orientation_from_contour(cnt1):
         orientation = orientation - 90
     return abs(orientation)
 
+
 def translate(value, leftMin, leftMax, rightMin, rightMax):
     # Figure out how 'wide' each range is
     leftSpan = leftMax - leftMin
@@ -196,6 +209,7 @@ def translate(value, leftMin, leftMax, rightMin, rightMax):
 
     # Convert the 0-1 range into a value in the right range.
     return rightMin + (valueScaled * rightSpan)
+
 
 if __name__ == '__main__':
     main()
