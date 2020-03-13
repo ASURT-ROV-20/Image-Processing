@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="108044e4-ab2b-4915-ad50-a3dd988783e9" name="Default Changelist" comment="" />
+    <list default="true" id="108044e4-ab2b-4915-ad50-a3dd988783e9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/ROV Box Unfold.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ROV Box Unfold.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box11.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box22.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box3.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box33.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box4.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box44.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box5.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Images/Box5.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Box55.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stitching.py" beforeDir="false" afterPath="$PROJECT_DIR$/Stitching.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1UzkDUofCcjA3e4GgMHnzugeFxF" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -15,19 +40,21 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Stitching.py" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Mission View.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
     <configuration name="Stitching" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="ROV Box Unfold" />
-      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_OPTIONS" value="-O" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Stitching.py" />
@@ -66,30 +93,30 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="146" y="24" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576367088393">
+    <state x="146" y="24" width="1073" height="693" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583522192976">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state x="146" y="24" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.24.1366.693@0.24.1366.693" timestamp="1576367088393" />
-    <state x="469" y="124" key="FileChooserDialogImpl" timestamp="1576367082076">
+    <state x="146" y="24" width="1073" height="693" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.24.1366.693@0.24.1366.693" timestamp="1583522192976" />
+    <state x="469" y="124" key="FileChooserDialogImpl" timestamp="1582981644355">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state x="469" y="124" key="FileChooserDialogImpl/0.24.1366.693@0.24.1366.693" timestamp="1576367082076" />
-    <state width="1343" height="176" key="GridCell.Tab.0.bottom" timestamp="1581963777451">
+    <state x="469" y="124" key="FileChooserDialogImpl/0.24.1366.693@0.24.1366.693" timestamp="1582981644355" />
+    <state width="1343" height="194" key="GridCell.Tab.0.bottom" timestamp="1583522282539">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="176" key="GridCell.Tab.0.bottom/0.24.1366.693@0.24.1366.693" timestamp="1581963777451" />
-    <state width="1343" height="176" key="GridCell.Tab.0.center" timestamp="1581963777450">
+    <state width="1343" height="194" key="GridCell.Tab.0.bottom/0.24.1366.693@0.24.1366.693" timestamp="1583522282539" />
+    <state width="1343" height="194" key="GridCell.Tab.0.center" timestamp="1583522282538">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="176" key="GridCell.Tab.0.center/0.24.1366.693@0.24.1366.693" timestamp="1581963777450" />
-    <state width="1343" height="176" key="GridCell.Tab.0.left" timestamp="1581963777450">
+    <state width="1343" height="194" key="GridCell.Tab.0.center/0.24.1366.693@0.24.1366.693" timestamp="1583522282538" />
+    <state width="1343" height="194" key="GridCell.Tab.0.left" timestamp="1583522282537">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="176" key="GridCell.Tab.0.left/0.24.1366.693@0.24.1366.693" timestamp="1581963777450" />
-    <state width="1343" height="176" key="GridCell.Tab.0.right" timestamp="1581963777451">
+    <state width="1343" height="194" key="GridCell.Tab.0.left/0.24.1366.693@0.24.1366.693" timestamp="1583522282537" />
+    <state width="1343" height="194" key="GridCell.Tab.0.right" timestamp="1583522282538">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state width="1343" height="176" key="GridCell.Tab.0.right/0.24.1366.693@0.24.1366.693" timestamp="1581963777451" />
+    <state width="1343" height="194" key="GridCell.Tab.0.right/0.24.1366.693@0.24.1366.693" timestamp="1583522282538" />
     <state width="1343" height="220" key="GridCell.Tab.1.bottom" timestamp="1576430486098">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
@@ -106,9 +133,17 @@
       <screen x="0" y="24" width="1366" height="693" />
     </state>
     <state width="1343" height="220" key="GridCell.Tab.1.right/0.24.1366.693@0.24.1366.693" timestamp="1576430486098" />
-    <state x="344" y="185" key="com.intellij.ide.util.TipDialog" timestamp="1581954141007">
+    <state x="176" y="24" key="SettingsEditor" timestamp="1582824286202">
       <screen x="0" y="24" width="1366" height="693" />
     </state>
-    <state x="344" y="185" key="com.intellij.ide.util.TipDialog/0.24.1366.693@0.24.1366.693" timestamp="1581954141007" />
+    <state x="176" y="24" key="SettingsEditor/0.24.1366.693@0.24.1366.693" timestamp="1582824286202" />
+    <state x="344" y="185" key="com.intellij.ide.util.TipDialog" timestamp="1583521166034">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state x="344" y="185" key="com.intellij.ide.util.TipDialog/0.24.1366.693@0.24.1366.693" timestamp="1583521166034" />
+    <state x="346" y="38" width="672" height="678" key="search.everywhere.popup" timestamp="1583369511808">
+      <screen x="0" y="24" width="1366" height="693" />
+    </state>
+    <state x="346" y="38" width="672" height="678" key="search.everywhere.popup/0.24.1366.693@0.24.1366.693" timestamp="1583369511808" />
   </component>
 </project>
