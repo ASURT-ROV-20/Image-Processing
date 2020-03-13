@@ -1,6 +1,8 @@
 import numpy as np
 from equation import equation
+from lines_distance import *
 import cv2
+import math
 
 def main():
 
@@ -8,8 +10,14 @@ def main():
     e1 = cv2.getTickCount()
     
     # read image
-    image_path = "map.jpg"
+    image_path = "1.jpg"
     image = cv2.imread(image_path)
+
+    # get distance between blue lines
+    cnt1, cnt2 = get_blue_line_contours(image)
+    distance = get_distance(cnt1, cnt2)
+    print("distance between blue lines: "+ str(distance))
+
     # image = cv2.resize(image, (image.shape[1] * 2, image.shape[0] * 2), interpolation=cv2.INTER_LINEAR)
    
     # init output photo
@@ -225,8 +233,6 @@ def classify(lines):
     Hequs = sorted(Hequs, key= lambda x : x.y1)
     Vequs = sorted(Vequs, key= lambda x : x.x1)
     return Hequs, Vequs
-    
-
 
 if __name__ == "__main__":
     main()
